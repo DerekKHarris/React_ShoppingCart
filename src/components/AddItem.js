@@ -3,45 +3,33 @@ import React from 'react';
 class AddItem extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {};
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
 	handleSubmit(event) {
 		event.preventDefault();
 
-		let productSelected = {};
-		this.props.products.forEach(item => {
-			if (item.name === this.state.product) {
-				productSelected = {
-					id: item.id,
-					name: item.name,
-					priceInCents: item.priceInCents
-				};
-			}
-		});
-
-		let itemToAdd = {
-			product: productSelected,
-			quantity: Number(this.state.quantity)
-		};
-		this.props.onSubmit(itemToAdd);
+		let productSelected = this.props.products.filter(
+			item => item.name === this.state.product
+		);
+		this.props.addItemToCart(productSelected[0], Number(this.state.quantity));
 	}
 
 	handleChange(event) {
 		this.setState({ [event.target.name]: event.target.value });
 	}
 
-	render() {
-		let productList = this.props.products;
-		let productOptions = productList.map(item => {
+	createProductOptions() {
+		return this.props.products.map(item => {
 			return (
 				<option value={item.name} key={item.id}>
 					{item.name}
 				</option>
 			);
 		});
+	}
 
+	render() {
 		return (
 			<div className='container'>
 				<form>
@@ -62,9 +50,9 @@ class AddItem extends React.Component {
 								name='product'
 								onChange={event => this.handleChange(event)}
 							>
-								{productOptions}
+								{this.createProductOptions()}
 							</select>
-						</div>{' '}
+						</div>
 						<button
 							type='submit'
 							className='btn btn-primary'

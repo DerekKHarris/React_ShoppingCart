@@ -1,7 +1,6 @@
 import React from 'react';
 
 class CartItem extends React.Component {
-	state = {};
 	render() {
 		return (
 			<div className='list-group-item'>

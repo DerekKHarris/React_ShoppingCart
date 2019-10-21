@@ -2,8 +2,8 @@ import React from 'react';
 import CartItem from './CartItem';
 
 class CartItems extends React.Component {
-	render() {
-		const currentItems = this.props.cartItems.map(item => {
+	createCurrentItems() {
+		return this.props.cartItems.map(item => {
 			return (
 				<CartItem
 					product={item.product.name}
@@ -13,7 +13,9 @@ class CartItems extends React.Component {
 				/>
 			);
 		});
+	}
 
+	render() {
 		return (
 			<div className='container'>
 				<h1>Cart Items</h1>
@@ -25,7 +27,7 @@ class CartItems extends React.Component {
 							<div className='col-md-2'>Quantity</div>
 						</div>
 					</div>
-					{currentItems}
+					{this.createCurrentItems()}
 				</div>
 			</div>
 		);

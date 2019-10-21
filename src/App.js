@@ -4,6 +4,7 @@ import CartHeader from './components/CartHeader';
 import Footer from './components/Footer';
 import CartItems from './components/CartItems';
 import AddItem from './components/AddItem';
+import CartTotal from './components/CartTotal';
 
 class App extends React.Component {
 	constructor() {
@@ -50,32 +51,20 @@ class App extends React.Component {
 		this.addItemToCart = this.addItemToCart.bind(this);
 	}
 
-	addItemToCart(item) {
+	addItemToCart(item, quantity) {
 		const { cartItems } = this.state;
 
-		const ids = cartItems.map(item => item.id);
+		const ids = cartItems.map(product => product.id);
 		const max_id = ids.length > 0 ? Math.max(...ids) : 0;
 
 		let itemToAdd = {
 			id: max_id + 1,
-			product: {
-				id: item.product.id,
-				name: item.product.name,
-				priceInCents: item.product.priceInCents
-			},
-			quantity: item.quantity
+			product: item,
+			quantity: quantity
 		};
 
 		cartItems.push(itemToAdd);
 		this.setState({ cartItems });
-	}
-
-	calculateTotal(items) {
-		let total = 0;
-		items.forEach(item => {
-			total += item.product.priceInCents * item.quantity;
-		});
-		return total;
 	}
 
 	render() {
@@ -83,11 +72,11 @@ class App extends React.Component {
 			<div>
 				<CartHeader />
 				<CartItems cartItems={this.state.cartItems} />
-				<div className='container'>
-					Total Price: $
-					{(this.calculateTotal(this.state.cartItems) / 100).toFixed(2)}
-				</div>
-				<AddItem products={this.state.products} onSubmit={this.addItemToCart} />
+				<CartTotal cartItems={this.state.cartItems} />
+				<AddItem
+					products={this.state.products}
+					addItemToCart={this.addItemToCart}
+				/>
 				<Footer copyright='2019' />
 			</div>
 		);
