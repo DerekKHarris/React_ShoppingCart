@@ -47,14 +47,17 @@ class App extends React.Component {
 			]
 		};
 
-		this.handleChange = this.handleChange.bind(this);
+		this.addItemToCart = this.addItemToCart.bind(this);
 	}
 
-	handleChange(item) {
-		let cart = this.state.cartItems;
+	addItemToCart(item) {
+		const { cartItems } = this.state;
+
+		const ids = cartItems.map(item => item.id);
+		const max_id = ids.length > 0 ? Math.max(...ids) : 0;
 
 		let itemToAdd = {
-			id: cart.length + 1,
+			id: max_id + 1,
 			product: {
 				id: item.product.id,
 				name: item.product.name,
@@ -63,8 +66,8 @@ class App extends React.Component {
 			quantity: item.quantity
 		};
 
-		cart.push(itemToAdd);
-		this.setState({ cartItems: cart });
+		cartItems.push(itemToAdd);
+		this.setState({ cartItems });
 	}
 
 	calculateTotal(items) {
@@ -84,7 +87,7 @@ class App extends React.Component {
 					Total Price: $
 					{(this.calculateTotal(this.state.cartItems) / 100).toFixed(2)}
 				</div>
-				<AddItem products={this.state.products} onSubmit={this.handleChange} />
+				<AddItem products={this.state.products} onSubmit={this.addItemToCart} />
 				<Footer copyright='2019' />
 			</div>
 		);
